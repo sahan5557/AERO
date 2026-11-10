@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | AERO-X DRONES</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Admin Navbar -->
+  <header class="navbar">
+    <div class="container navbar-inner">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+        </div>
+        <span>AERO<span class="text-gradient">-X</span> <span style="font-size:0.8rem; background:var(--accent-purple); padding:0.2rem 0.5rem; border-radius:4px; margin-left:0.4rem; color:white; font-weight:700;">ADMIN</span></span>
+      </a>
+
+      <div class="flex items-center gap-2">
+        <div class="user-badge-nav">
+          <span>👋 <strong id="adminProfileName">Admin</strong></span>
+          <span class="role-tag" style="background:var(--accent-purple);">ADMIN</span>
+        </div>
+        <a href="index.html" class="btn btn-secondary btn-sm">← Store Front</a>
+        <button id="adminLogoutBtn" class="btn btn-outline btn-sm">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Admin Dashboard Content -->
+  <main class="container admin-container">
+    <div style="margin-bottom: 2.5rem;">
+      <h1 style="font-size: 2.2rem; font-weight: 800;">Fleet Management & Metrics</h1>
+      <p style="color: var(--text-muted);">Manage drone products inventory, customer orders, and shop analytics.</p>
+    </div>
+
+    <!-- Analytics Cards Grid -->
+    <div class="grid stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Total Revenue</div>
+          <div id="statRevenue" style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono); color: var(--accent-cyan);">Rs. 0</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🚁</div>
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Active Drones</div>
+          <div id="statProductsCount" style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono);">0</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📦</div>
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Total Orders</div>
+          <div id="statOrdersCount" style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono);">0</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Registered Customers</div>
+          <div id="statCustomersCount" style="font-size: 1.6rem; font-weight: 800; font-family: var(--font-mono);">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Drone Product CRUD -->
+    <section style="margin-bottom: 4rem;">
+      <div class="flex-between" style="margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-size: 1.5rem; font-weight: 800;">Drone Products Inventory</h2>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">Add, edit specifications, or delete drone listings.</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="btn btn-secondary btn-sm" onclick="resetDefaultData()">↺ Reset Demo Fleet</button>
+          <button class="btn btn-primary" onclick="openModal('addProductModal')">
+            + Add New Drone
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Drone Model Name</th>
+              <th>Category</th>
+              <th>Price (Rs.)</th>
+              <th>Stock</th>
+              <th>Key Specs</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminProductsTableBody">
+            <!-- Rendered by admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section: Customer Orders -->
+    <section>
+      <div style="margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.5rem; font-weight: 800;">Customer Orders</h2>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Real-time checkout orders submitted by customers.</p>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer Name</th>
+              <th>Purchased Drones</th>
+              <th>Total Amount</th>
+              <th>Fulfillment Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="adminOrdersTableBody">
+            <!-- Rendered by admin.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add New Drone Modal -->
+  <div id="addProductModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3>Add New Drone Product</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('addProductModal')">✕</button>
+      </div>
+
+      <form id="addProductForm">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Drone Name</label>
+            <input type="text" id="newDroneName" class="form-control" placeholder="e.g. AERO SkyStrike 4K" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="newDroneCategory" class="form-control" required>
+              <option value="Cinematic">Cinematic</option>
+              <option value="FPV">FPV Racing</option>
+              <option value="Mini">Mini & Portable</option>
+              <option value="Enterprise">Enterprise</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Price (Rs. LKR)</label>
+            <input type="number" id="newDronePrice" class="form-control" placeholder="250000" min="1" step="1" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stock Quantity</label>
+            <input type="number" id="newDroneStock" class="form-control" placeholder="15" min="1" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Image URL</label>
+          <input type="url" id="newDroneImage" class="form-control" placeholder="https://images.unsplash.com/..." required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label class="form-label">Battery</label>
+            <input type="text" id="newDroneBattery" class="form-control" placeholder="40 Mins" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Camera</label>
+            <input type="text" id="newDroneCamera" class="form-control" placeholder="4K 60fps" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Speed</label>
+            <input type="text" id="newDroneSpeed" class="form-control" placeholder="70 km/h" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Range</label>
+            <input type="text" id="newDroneRange" class="form-control" placeholder="12 km" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Product Description</label>
+          <textarea id="newDroneDesc" class="form-control" rows="3" placeholder="Enter high performance features and capabilities..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Create Drone Listing</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Drone Modal -->
+  <div id="editProductModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3>Edit Drone Specifications</h3>
+        <button class="btn btn-secondary btn-sm" onclick="closeModal('editProductModal')">✕</button>
+      </div>
+
+      <form id="editProductForm">
+        <input type="hidden" id="editDroneId">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Drone Name</label>
+            <input type="text" id="editDroneName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select id="editDroneCategory" class="form-control" required>
+              <option value="Cinematic">Cinematic</option>
+              <option value="FPV">FPV Racing</option>
+              <option value="Mini">Mini & Portable</option>
+              <option value="Enterprise">Enterprise</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Price (Rs. LKR)</label>
+            <input type="number" id="editDronePrice" class="form-control" step="1" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stock Quantity</label>
+            <input type="number" id="editDroneStock" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Image URL</label>
+          <input type="url" id="editDroneImage" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label class="form-label">Battery</label>
+            <input type="text" id="editDroneBattery" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Camera</label>
+            <input type="text" id="editDroneCamera" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Speed</label>
+            <input type="text" id="editDroneSpeed" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Range</label>
+            <input type="text" id="editDroneRange" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Product Description</label>
+          <textarea id="editDroneDesc" class="form-control" rows="3" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
