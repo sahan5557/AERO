@@ -1,8 +1,4 @@
 <?php
-// ========================================================
-// AERO-X Backend Database Connection (PDO)
-// Compatible with XAMPP MySQL / MariaDB
-// ========================================================
 
 // Allow Cross-Origin Requests & JSON output
 header("Access-Control-Allow-Origin: *");
@@ -54,10 +50,7 @@ try {
     exit();
 }
 
-/**
- * Auto-initializes database tables if they do not exist.
- * This guarantees the project works immediately in XAMPP even before importing database.sql!
- */
+
 function initializeTablesIfMissing($pdo) {
     // Check if products table exists
     $stmt = $pdo->query("SHOW TABLES LIKE 'products'");

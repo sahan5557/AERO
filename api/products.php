@@ -1,8 +1,6 @@
 <?php
-// ========================================================
 // AERO-X Products API
 // Handles GET (All / Single), POST (Create), PUT (Update), DELETE
-// ========================================================
 
 require_once __DIR__ . '/db.php';
 
@@ -38,10 +36,7 @@ function formatProduct($row) {
 }
 
 switch ($method) {
-
-    // ----------------------------------------------------
     // GET: Fetch all products or a single product by ID
-    // ----------------------------------------------------
     case 'GET':
         $id = $_GET['id'] ?? null;
         $category = $_GET['category'] ?? null;
@@ -82,9 +77,7 @@ switch ($method) {
         }
         break;
 
-    // ----------------------------------------------------
     // POST: Add New Product OR Update (if action=update)
-    // ----------------------------------------------------
     case 'POST':
         $data = !empty($jsonData) ? $jsonData : $_POST;
         $action = $data['action'] ?? ($_GET['action'] ?? '');
@@ -147,17 +140,13 @@ switch ($method) {
         ]);
         break;
 
-    // ----------------------------------------------------
     // PUT: Update Existing Product
-    // ----------------------------------------------------
     case 'PUT':
         $data = !empty($jsonData) ? $jsonData : $_REQUEST;
         handleUpdateProduct($pdo, $data);
         break;
 
-    // ----------------------------------------------------
     // DELETE: Delete Product
-    // ----------------------------------------------------
     case 'DELETE':
         $id = $_GET['id'] ?? ($jsonData['id'] ?? null);
 
@@ -202,9 +191,8 @@ switch ($method) {
         break;
 }
 
-/**
- * Helper to update a product record
- */
+    //Helper to update a product record
+
 function handleUpdateProduct($pdo, $data) {
     $id = trim($data['id'] ?? ($_GET['id'] ?? ''));
 

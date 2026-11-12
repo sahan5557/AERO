@@ -1,8 +1,6 @@
 <?php
-// ========================================================
 // AERO-X Authentication API
 // Handles Login, Customer Registration, and User Listing
-// ========================================================
 
 require_once __DIR__ . '/db.php';
 
@@ -13,9 +11,7 @@ $action   = $_GET['action'] ?? ($jsonData['action'] ?? ($_POST['action'] ?? ''))
 
 switch ($method) {
 
-    // ----------------------------------------------------
     // GET: List users
-    // ----------------------------------------------------
     case 'GET':
         $stmt = $pdo->query("SELECT `id`, `name`, `email`, `phone`, `address`, `role`, `created_at` FROM `users` ORDER BY `id` ASC");
         $users = $stmt->fetchAll();
@@ -27,9 +23,7 @@ switch ($method) {
         ]);
         break;
 
-    // ----------------------------------------------------
     // POST: Login or Register
-    // ----------------------------------------------------
     case 'POST':
         $data = !empty($jsonData) ? $jsonData : $_POST;
 

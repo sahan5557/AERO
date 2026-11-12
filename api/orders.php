@@ -1,9 +1,4 @@
 <?php
-// ========================================================
-// AERO-X Orders API
-// Handles GET (All Orders), POST (Create Order), Update Status
-// ========================================================
-
 require_once __DIR__ . '/db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -12,9 +7,7 @@ $jsonData = json_decode($rawInput, true) ?? [];
 
 switch ($method) {
 
-    // ----------------------------------------------------
     // GET: List all customer orders
-    // ----------------------------------------------------
     case 'GET':
         $stmt = $pdo->query("SELECT * FROM `orders` ORDER BY `created_at` DESC");
         $orders = $stmt->fetchAll();
@@ -56,9 +49,7 @@ switch ($method) {
         ]);
         break;
 
-    // ----------------------------------------------------
     // POST: Create New Order OR Update Status
-    // ----------------------------------------------------
     case 'POST':
         $data = !empty($jsonData) ? $jsonData : $_POST;
         $action = $data['action'] ?? ($_GET['action'] ?? '');
@@ -152,9 +143,7 @@ switch ($method) {
         }
         break;
 
-    // ----------------------------------------------------
     // PUT: Direct Status Update
-    // ----------------------------------------------------
     case 'PUT':
         $data = !empty($jsonData) ? $jsonData : $_REQUEST;
         $orderId = trim($data['orderId'] ?? ($data['order_id'] ?? ''));
